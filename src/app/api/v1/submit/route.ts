@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendNewMessageNotification } from '@/lib/email'
 
 // Rate limiting - simple in-memory store
 const rateLimit = new Map<string, { count: number; resetAt: number }>()
@@ -47,9 +48,23 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    // Find site by token
+    // Find site by token with user SMTP config
     const site = await prisma.site.findUnique({
       where: { token },
+      include: {
+        user: {
+          select: {
+            smtpEnabled: true,
+            smtpHost: true,
+            smtpPort: true,
+            smtpSecure: true,
+            smtpUser: true,
+            smtpPass: true,
+            smtpFromEmail: true,
+            smtpFromName: true,
+          },
+        },
+      },
     })
 
     if (!site) {
@@ -123,13 +138,41 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // TODO: Send email notification (requires email service setup)
-    // For now, just log it
-    console.log(`[Milano Inbox] Nova mensagem para ${site.name}:`, {
-      id: message.id,
-      from: message.senderName,
-      email: message.senderEmail,
-    })
+    // Send email notification if SMTP is configured
+    if (site.user.smtpEnabled && site.user.smtpHost && site.user.smtpUser && site.user.smtpPass) {
+      try {
+        await sendNewMessageNotification(
+          {
+            smtpEnabled: site.user.smtpEnabled,
+            smtpHost: site.user.smtpHost,
+            smtpPort: site.user.smtpPort,
+            smtpSecure: site.user.smtpSecure,
+            smtpUser: site.user.smtpUser,
+            smtpPass: site.user.smtpPass,
+            smtpFromEmail: site.user.smtpFromEmail,
+            smtpFromName: site.user.smtpFromName,
+          },
+          site.name,
+          site.domain,
+          {
+            senderName: message.senderName,
+            senderEmail: message.senderEmail,
+            subject: message.subject,
+            content: message.content,
+            createdAt: message.createdAt,
+          }
+        )
+      } catch (emailError) {
+        console.error('[Email] Erro ao enviar notificação:', emailError)
+        // Não falha o request se o email falhar
+      }
+    } else {
+      console.log(`[Milano Inbox] Nova mensagem para ${site.name} (sem notificação - SMTP não configurado):`, {
+        id: message.id,
+        from: message.senderName,
+        email: message.senderEmail,
+      })
+    }
 
     return NextResponse.json({
       ok: true,

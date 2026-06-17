@@ -15,6 +15,17 @@ model User {
   name           String?
   resetToken     String?
   resetTokenExp  DateTime?
+  
+  // SMTP Settings (opcional - cada usuário configura o seu)
+  smtpEnabled    Boolean  @default(false)
+  smtpHost      String?
+  smtpPort      Int      @default(587)
+  smtpSecure    Boolean  @default(true)  // true = TLS, false = STARTTLS
+  smtpUser      String?
+  smtpPass      String?  // Criptografado em produção
+  smtpFromEmail String?
+  smtpFromName  String?
+  
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 

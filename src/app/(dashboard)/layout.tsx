@@ -28,10 +28,14 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               </span>
             </Link>
 
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-slate-600 dark:text-slate-300">
-                {user?.email}
-              </span>
+            <div className="flex items-center gap-2">
+              <Link
+                href="/dashboard/settings"
+                className="btn btn-ghost text-slate-600 dark:text-slate-300"
+              >
+                <Settings className="h-4 w-4" />
+                <span className="hidden sm:inline">Configurações</span>
+              </Link>
               <button
                 onClick={handleLogout}
                 className="btn btn-ghost text-slate-600 dark:text-slate-300"
