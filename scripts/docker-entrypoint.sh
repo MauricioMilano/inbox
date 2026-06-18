@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+# Usar /bin/sh pois Alpine não tem bash por padrão
+
 set -e
 
 echo "🚀 Iniciando Milano Inbox..."
