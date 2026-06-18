@@ -45,4 +45,3 @@ Dockerfile
 docker-compose*.yml
 .eslintrc*
 .prettier*
-tsconfig.json
