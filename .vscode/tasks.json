@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "start-dev-server",
+			"type": "shell",
+			"command": "cd /d c:\\Users\\mmila\\Downloads\\Form\\milano-inbox && pnpm run dev 2>&1",
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "start-dev-server",
+			"type": "shell",
+			"command": "pnpm run dev",
+			"isBackground": true,
+			"group": "build"
+		}
+	]
+}

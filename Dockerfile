@@ -17,19 +17,13 @@ RUN npm ci --ignore-scripts
 # Copia binaries nativos pro ambiente de runtime
 RUN npm rebuild
 
-# ─────────────────────────────────────────────────────────────
-# Stage 2: Build
-# ─────────────────────────────────────────────────────────────
-FROM node:20-alpine AS builder
 
-WORKDIR /app
-
-# Copia dependências do stage anterior
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+RUN npm install 
 
 # Gera Prisma Client
 RUN npx prisma generate
+
+
 
 # Build da aplicação
 RUN npm run build
