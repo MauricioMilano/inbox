@@ -13,12 +13,22 @@ COPY package.json package-lock.json* ./
 
 # Instala dependências
 RUN npm ci --ignore-scripts
-
+RUN npm install 
 # Copia binaries nativos pro ambiente de runtime
 RUN npm rebuild
 
+# ─────────────────────────────────────────────────────────────
+# Stage 2: Build
+# ─────────────────────────────────────────────────────────────
+FROM node:20-alpine AS builder
 
-RUN npm install 
+WORKDIR /app
+
+# Copia dependências do stage anterior
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+
 
 # Gera Prisma Client
 RUN npx prisma generate
