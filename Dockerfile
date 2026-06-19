@@ -59,7 +59,7 @@ WORKDIR /app
 
 # Define variáveis de ambiente
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=3001
 
 # Copia node_modules e built app
 COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
@@ -81,7 +81,7 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 USER nodejs
 
 # Porta exposta
-EXPOSE 3000
+EXPOSE 3001
 
 # Healthcheck
 HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
