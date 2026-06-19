@@ -115,15 +115,7 @@ export default function DashboardPage() {
               {/* Logo / Avatar */}
               <div className="flex items-start justify-between mb-4">
                 <div className="w-16 h-16 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
-                  {site.logoPath ? (
-                    <img
-                      src={site.logoPath}
-                      alt={site.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <Globe className="h-8 w-8 text-slate-400" />
-                  )}
+                  {site.logoPath && <SiteLogo src={site.logoPath} alt={site.name} />}
                 </div>
                 <div className="flex items-center gap-1">
                   <button
@@ -352,5 +344,25 @@ function SiteEditModal({
         </div>
       </div>
     </div>
+  )
+}
+
+/**
+ * SiteLogo — renders the site's logo image, falling back to a Globe icon
+ * if the image fails to load (e.g. file missing from public/uploads/logos
+ * because the volume wasn't mounted, file was deleted, or path is stale).
+ */
+function SiteLogo({ src, alt }: { src: string; alt: string }) {
+  const [broken, setBroken] = useState(false)
+  if (broken) {
+    return <Globe className="h-8 w-8 text-slate-400" aria-label={`${alt} (logo indisponível)`} />
+  }
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className="w-full h-full object-cover"
+      onError={() => setBroken(true)}
+    />
   )
 }
