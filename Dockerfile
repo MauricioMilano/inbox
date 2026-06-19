@@ -6,6 +6,10 @@
 # ─────────────────────────────────────────────────────────────
 FROM node:20-alpine AS deps
 
+# OpenSSL é necessário para o Prisma Schema Engine funcionar no Alpine (musl)
+# binaryTarget "linux-musl-openssl-3.0.x" em prisma/schema.prisma requer libssl
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 # Copia só package files pra cache
@@ -19,6 +23,9 @@ RUN npm rebuild
 # Stage 2: Build
 # ─────────────────────────────────────────────────────────────
 FROM node:20-alpine AS builder
+
+# OpenSSL para o prisma generate rodar o schema engine
+RUN apk add --no-cache openssl
 
 WORKDIR /app
 
@@ -37,8 +44,11 @@ RUN npm run build
 # ─────────────────────────────────────────────────────────────
 FROM node:20-alpine AS runtime
 
-# Instala dumb-init pra tratamento de sinais
-RUN apk add --no-cache dumb-init
+# Instala dumb-init pra tratamento de sinais + OpenSSL para Prisma Schema Engine
+# Sem isso, `npx prisma db push` falha com:
+#   "Could not parse schema engine response: ... Error loading schema engine ..."
+#   "Please manually install OpenSSL and try installing Prisma again."
+RUN apk add --no-cache dumb-init openssl
 
 # Cria usuário não-root
 RUN addgroup -g 1001 -S nodejs && \
