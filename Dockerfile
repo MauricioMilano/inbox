@@ -44,11 +44,12 @@ RUN npm run build
 # ─────────────────────────────────────────────────────────────
 FROM node:20-alpine AS runtime
 
-# Instala dumb-init pra tratamento de sinais + OpenSSL para Prisma Schema Engine
-# Sem isso, `npx prisma db push` falha com:
+# Instala dumb-init (sinais) + OpenSSL (Prisma Schema Engine) + wget (healthcheck)
+# Sem OpenSSL, `npx prisma db push` falha com:
 #   "Could not parse schema engine response: ... Error loading schema engine ..."
 #   "Please manually install OpenSSL and try installing Prisma again."
-RUN apk add --no-cache dumb-init openssl
+# Sem wget, o HEALTHCHECK falha pois node:20-alpine não vem com wget.
+RUN apk add --no-cache dumb-init openssl wget
 
 # Cria usuário não-root
 RUN addgroup -g 1001 -S nodejs && \
