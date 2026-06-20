@@ -24,6 +24,19 @@ echo "🔎 Procurando dev.db em /app..."
 find /app -name "dev.db" 2>/dev/null || echo "  (nenhum dev.db encontrado)"
 echo "🔎 Prisma versão:      $(npx prisma --version 2>/dev/null | head -3 || echo 'não foi possível obter')"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "🔍 .env existe?        $([ -f /app/.env ] && echo SIM || echo NAO)"
+if [ -f /app/.env ]; then
+    echo "📄 Conteúdo de /app/.env:"
+    cat /app/.env
+fi
+echo "🔍 prisma.config.ts existe? $([ -f /app/prisma.config.ts ] && echo SIM || echo NAO)"
+if [ -f /app/prisma.config.ts ]; then
+    echo "📄 Conteúdo de /app/prisma.config.ts:"
+    cat /app/prisma.config.ts
+fi
+echo "🔍 Variáveis de ambiente Prisma (PRISMA_*):"
+env | grep -i prisma || echo "  (nenhuma)"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 # ─── FIM DEBUG ───
 
 # Verifica se o banco de dados já existe
