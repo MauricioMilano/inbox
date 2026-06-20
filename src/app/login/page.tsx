@@ -29,15 +29,15 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">Milano Inbox</h1>
-          <p className="text-slate-600 mt-2">Sistema de caixa de entrada</p>
+          <h1 className="text-3xl font-bold text-white">Milano Inbox</h1>
+          <p className="text-slate-300 mt-2">Sistema de caixa de entrada</p>
         </div>
 
         <div className="card shadow-lg">
-          <h2 className="text-xl font-semibold mb-6 text-center">Entrar</h2>
+          <h2 className="text-xl font-semibold mb-6 text-center text-slate-900 dark:text-white">Entrar</h2>
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4 text-sm">
@@ -47,7 +47,7 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-1">
+              <label htmlFor="email" className="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-200">
                 Email
               </label>
               <input
@@ -61,7 +61,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-1">
+              <label htmlFor="password" className="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-200">
                 Senha
               </label>
               <input
@@ -84,11 +84,11 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-6 text-center text-sm">
-            <Link href="/forgot-password" className="text-blue-600 hover:underline">
+            <Link href="/forgot-password" className="text-blue-500 hover:underline">
               Esqueci minha senha
             </Link>
             <span className="mx-2 text-slate-400">|</span>
-            <Link href="/register" className="text-blue-600 hover:underline">
+            <Link href="/register" className="text-blue-500 hover:underline">
               Criar conta
             </Link>
           </div>
