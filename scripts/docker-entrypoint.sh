@@ -43,9 +43,8 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 # ─── FIM DEBUG ───
 
 # Garante que o diretório /data/prisma existe com permissão do nodejs
-mkdir -p /data/prisma
-chown -R nodejs:nodejs /data
-chmod -R 755 /data
+# (criado no Dockerfile, mas só pra garantir caso o volume monte vazio)
+mkdir -p /data/prisma 2>/dev/null || echo "⚠️  Não foi possível criar /data/prisma (volume já deve estar montado)"
 
 # Verifica se o banco de dados já existe
 if [ ! -f "/data/prisma/dev.db" ]; then

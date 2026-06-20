@@ -55,6 +55,12 @@ RUN apk add --no-cache dumb-init openssl wget
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001
 
+# Cria diretório de dados persistentes com permissão pro nodejs
+# (o volume monta em /data, mas o ponto de montagem precisa existir antes)
+RUN mkdir -p /data/prisma && \
+    chown -R nodejs:nodejs /data && \
+    chmod -R 755 /data
+
 WORKDIR /app
 
 # Define variáveis de ambiente
